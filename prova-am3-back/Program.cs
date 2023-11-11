@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProvaPub.Repository;
 using ProvaPub.Services;
+using ProvaPub.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,9 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped(typeof(IGenericListService<>), typeof(GenericListService<>));
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddSingleton<RandomService>();
 builder.Services.AddDbContext<TestDbContext>(options => options.UseSqlite("Data Source=Test.db"));

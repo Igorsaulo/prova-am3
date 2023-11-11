@@ -4,6 +4,6 @@ namespace ProvaPub.Services
 {
     public interface ICustomerService
     {
-        CustomerList ListCustomers(int page);
+        BaseList<Customer> ListCustomers(int page);
     }
 }

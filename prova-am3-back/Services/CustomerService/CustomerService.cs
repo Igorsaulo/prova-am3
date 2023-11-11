@@ -6,26 +6,18 @@ namespace ProvaPub.Services
 {
     public class CustomerService : ICustomerService
     {
-        TestDbContext _ctx;
+        private readonly TestDbContext _ctx;
+        private readonly IGenericListService<Customer> _customerListService;
 
         public CustomerService(TestDbContext ctx)
         {
             _ctx = ctx;
+            _customerListService = new GenericListService<Customer>(_ctx, _ctx.Customers);
         }
 
-        public CustomerList ListCustomers(int page)
+        public BaseList<Customer> ListCustomers(int page)
         {
-            const int pageSize = 10;
-            var totalCount = _ctx.Customers.Count();
-            var customers = _ctx.Customers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            var hasNext = (page * pageSize) < totalCount;
-
-            return new CustomerList
-            {
-                HasNext = hasNext,
-                TotalCount = totalCount,
-                Data = customers
-            };
+            return _customerListService.List(page);
         }
     }
 }
