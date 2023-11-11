@@ -15,7 +15,17 @@ namespace ProvaPub.Services
 
         public CustomerList ListCustomers(int page)
         {
-            return new CustomerList() { HasNext = false, TotalCount = 10, Customers = _ctx.Customers.ToList() };
+            const int pageSize = 10;
+            var totalCount = _ctx.Customers.Count();
+            var customers = _ctx.Customers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var hasNext = (page * pageSize) < totalCount;
+
+            return new CustomerList
+            {
+                HasNext = hasNext,
+                TotalCount = totalCount,
+                Customers = customers
+            };
         }
     }
 }
