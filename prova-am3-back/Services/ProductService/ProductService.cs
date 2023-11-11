@@ -3,7 +3,7 @@ using ProvaPub.Repository;
 
 namespace ProvaPub.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         TestDbContext _ctx;
 
@@ -23,7 +23,7 @@ namespace ProvaPub.Services
             {
                 HasNext = hasNext,
                 TotalCount = totalCount,
-                Products = products
+                Data = products
             };
         }
     }

@@ -20,6 +20,9 @@ builder.Services.AddCors(options =>
 			.AllowAnyHeader());
 });
 
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddSingleton<RandomService>();
 builder.Services.AddDbContext<TestDbContext>(options => options.UseSqlite("Data Source=Test.db"));
 var app = builder.Build();

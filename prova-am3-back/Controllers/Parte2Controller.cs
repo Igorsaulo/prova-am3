@@ -10,6 +10,8 @@ namespace ProvaPub.Controllers
 	[Route("[controller]")]
 	public class Parte2Controller :  ControllerBase
 	{
+		private readonly IProductService _productService;
+		private readonly ICustomerService _customerService;
 		/// <summary>
 		/// Precisamos fazer algumas alterações:
 		/// 1 - Não importa qual page é informada, sempre são retornados os mesmos resultados. Faça a correção.
@@ -19,23 +21,23 @@ namespace ProvaPub.Controllers
 		/// 
 		/// </summary>
 		TestDbContext _ctx;
-		public Parte2Controller(TestDbContext ctx)
+		public Parte2Controller(TestDbContext ctx, IProductService productService, ICustomerService customerService)
 		{
 			_ctx = ctx;
+			_productService = productService;
+			_customerService = customerService;
 		}
 	
 		[HttpGet("products")]
 		public ProductList ListProducts(int page)
 		{
-			var productService = new ProductService(_ctx);
-			return productService.ListProducts(page);
+			return _productService.ListProducts(page);
 		}
 
 		[HttpGet("customers")]
 		public CustomerList ListCustomers(int page)
 		{
-			var customerService = new CustomerService(_ctx);
-			return customerService.ListCustomers(page);
+			return _customerService.ListCustomers(page);
 		}
 	}
 }
