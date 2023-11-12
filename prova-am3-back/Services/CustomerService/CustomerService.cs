@@ -19,5 +19,10 @@ namespace ProvaPub.Services
         {
             return _customerListService.List(page);
         }
+
+        public BaseList<Customer> GetWithFilter(int page, FilterDto<Customer> filters)
+        {
+            return _customerListService.GetWithFilter(page, filters);
+        }
     }
 }
