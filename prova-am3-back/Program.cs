@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using ProvaPub.Mappers;
+using ProvaPub.Models;
 using ProvaPub.Repository;
 using ProvaPub.Services;
-using ProvaPub.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +13,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
-{
-	options.AddPolicy("CorsPolicy",
-		builder => builder
-			.AllowAnyOrigin()
-			.AllowAnyMethod()
-			.AllowAnyHeader());
-});
+builder
+    .Services
+    .AddCors(options =>
+    {
+        options.AddPolicy(
+            "CorsPolicy",
+            builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+        );
+    });
 
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped(typeof(IGenericListService<>), typeof(GenericListService<>));
@@ -36,15 +38,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-	app.UseCors("CorsPolicy");
+    app.UseCors("CorsPolicy");
 }
 
 app.UseHttpsRedirection();
 
 app.UseCors();
-    
-app.UseAuthorization();
 
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using ProvaPub.Models;
 using ProvaPub.Repository;
 
@@ -13,53 +12,81 @@ namespace ProvaPub.Services
         private readonly DbSet<T> _dbSet;
         private readonly int _pageSize = 10;
 
-        public GenericListService(TestDbContext ctx, DbSet<T> dbSet)
+        public GenericListService(TestDbContext ctx)
         {
             _ctx = ctx;
-            _dbSet = dbSet;
+            _dbSet = _ctx.Set<T>();
         }
 
-        public BaseList<T> List(int page)
+        private Expression<Func<T, bool>> BuildFilterExpression(FilterDto<T> filters = null)
         {
-            var totalCount = _dbSet.Count();
-            var data = _dbSet.Skip((page - 1) * _pageSize).Take(_pageSize).ToList();
-            var hasNext = (page * _pageSize) < totalCount;
+            if (filters == null)
+                return null;
 
-            return new BaseList<T>
+            Expression<Func<T, bool>> filterExpression = null;
+
+            if (filters.Name != null)
             {
-                HasNext = hasNext,
-                TotalCount = totalCount,
-                Data = data
-            };
+                Expression<Func<T, bool>> nameFilter = e =>
+                    EF.Property<string>(e, "Name").Contains(filters.Name);
+                filterExpression =
+                    filterExpression == null
+                        ? nameFilter
+                        : CombineExpressions(filterExpression, nameFilter);
+            }
+
+            if (filters.Id != 0)
+            {
+                Expression<Func<T, bool>> idFilter = e => EF.Property<int?>(e, "Id") == filters.Id;
+                filterExpression =
+                    filterExpression == null
+                        ? idFilter
+                        : CombineExpressions(filterExpression, idFilter);
+            }
+
+            return filterExpression;
         }
 
-        public BaseList<T> GetWithFilter(int page, FilterDto<T> filters)
+        private Expression<Func<T, bool>> CombineExpressions(
+            Expression<Func<T, bool>> expr1,
+            Expression<Func<T, bool>> expr2
+        )
         {
-            var query = _dbSet.AsQueryable();
+            var parameter = Expression.Parameter(typeof(T));
+            var combined = Expression.AndAlso(
+                Expression.Invoke(expr1, parameter),
+                Expression.Invoke(expr2, parameter)
+            );
+            return Expression.Lambda<Func<T, bool>>(combined, parameter);
+        }
 
-            if (filters.Name != null && filters.Id != 0)
-            {
-                query = query.Where(e => EF.Property<int?>(e, "Id") == filters.Id);
-            }
-            else if (filters.Name != null)
-            {
-                query = query.Where(e => EF.Property<string>(e, "Name").Contains(filters.Name));
-            }
-            else if (filters.Id != 0)
-            {
-                query = query.Where(e => EF.Property<int?>(e, "Id") == filters.Id);
-            }
+        private BaseList<T> DbConsult(int page, FilterDto<T> filters = null)
+        {
+            var filterExpression = BuildFilterExpression(filters);
+
+            var query = filterExpression != null ? _dbSet.Where(filterExpression) : _dbSet;
 
             var totalCount = query.Count();
+            var totalPages = (int)System.Math.Ceiling((double)totalCount / _pageSize);
             var data = query.Skip((page - 1) * _pageSize).Take(_pageSize).ToList();
             var hasNext = (page * _pageSize) < totalCount;
 
             return new BaseList<T>
             {
                 HasNext = hasNext,
-                TotalCount = totalCount,
+                TotalCount = totalPages,
                 Data = data
             };
+        }
+
+        public BaseList<T> GetWithFilter(int page, FilterDto<T> filters)
+        {
+            return DbConsult(page, filters);
+        }
+
+        public BaseList<T> List(int page)
+        {
+            return DbConsult(page);
         }
     }
 }

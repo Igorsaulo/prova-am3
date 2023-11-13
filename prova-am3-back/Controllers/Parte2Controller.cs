@@ -41,16 +41,16 @@ namespace ProvaPub.Controllers
         [HttpGet("products")]
         public ActionResult<ProductList> ListProducts(int page)
         {
-            var baseList = _productService.ListProducts(page);
+            var baseList = _productService.List(page);
             return Ok(_mapper.Map<ProductList>(baseList));
         }
 
-        [HttpGet("customers")]
-        public ActionResult<CustomerList> ListCustomers(int page)
-        {
-            var baseList = _customerService.ListCustomers(page);
-            return Ok(_mapper.Map<CustomerList>(baseList));
-        }
+        // [HttpGet("customers")]
+        // public ActionResult<CustomerList> ListCustomers(int page)
+        // {
+        //     var baseList = _customerService.List(page);
+        //     return Ok(_mapper.Map<CustomerList>(baseList));
+        // }
 
         [HttpGet("products/filter")]
         public ActionResult<ProductList> GetProductsWithFilter(int page, string filters)
@@ -60,12 +60,12 @@ namespace ProvaPub.Controllers
             return Ok(_mapper.Map<ProductList>(baseList));
         }
 
-        [HttpGet("customers/filter")]
-        public ActionResult<CustomerList> GetCustomersWithFilter(int page, string filters)
-        {
-            var filterObject = JsonConvert.DeserializeObject<FilterDto<Customer>>(filters);
-            var baseList = _customerService.GetWithFilter(page, filterObject);
-            return Ok(_mapper.Map<CustomerList>(baseList));
-        }
+        // [HttpGet("customers/filter")]
+        // public ActionResult<CustomerList> GetCustomersWithFilter(int page, string filters)
+        // {
+        //     var filterObject = JsonConvert.DeserializeObject<FilterDto<Customer>>(filters);
+        //     var baseList = _customerService.GetWithFilter(page, filterObject);
+        //     return Ok(_mapper.Map<CustomerList>(baseList));
+        // }
     }
 }
