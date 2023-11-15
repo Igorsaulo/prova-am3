@@ -67,14 +67,13 @@ namespace ProvaPub.Services
             var query = filterExpression != null ? _dbSet.Where(filterExpression) : _dbSet;
 
             var totalCount = query.Count();
-            var totalPages = (int)System.Math.Ceiling((double)totalCount / _pageSize);
             var data = query.Skip((page - 1) * _pageSize).Take(_pageSize).ToList();
             var hasNext = (page * _pageSize) < totalCount;
 
             return new BaseList<T>
             {
                 HasNext = hasNext,
-                TotalCount = totalPages,
+                TotalCount = totalCount,
                 Data = data
             };
         }
