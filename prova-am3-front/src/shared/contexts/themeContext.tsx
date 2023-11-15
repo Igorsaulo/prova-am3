@@ -1,7 +1,7 @@
 import {createContext, useCallback, useContext, useMemo, useState} from "react";
 import {Box, ThemeProvider} from "@mui/material";
 import {LightTheme, DarkTheme} from "../themes";
-import { ToggleThemeButton } from "../layouts/ToggleThemeButton";
+import { ToggleThemeButton } from "../components";
 
 interface IThemeContext {
     theme: "light" | "dark";

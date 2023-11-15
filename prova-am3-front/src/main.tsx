@@ -8,7 +8,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import { Layout } from './shared/layouts/Layout.tsx';
+import { Layout } from './shared/components/index.ts';
 
 const queryClient = new QueryClient(
   {

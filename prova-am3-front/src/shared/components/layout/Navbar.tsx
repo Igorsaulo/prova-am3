@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { NavLink } from "../components";
+import { NavLink } from "./NavLink";
 
 function Navbar() {
   return (

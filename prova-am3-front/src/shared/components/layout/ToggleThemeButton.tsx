@@ -1,7 +1,7 @@
 import { Button, useTheme } from '@mui/material';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import Brightness5OutlinedIcon from '@mui/icons-material/Brightness5Outlined';
-import { appUseThemeContext } from '../contexts';
+import { appUseThemeContext } from '../../contexts';
 
 function ToggleThemeButton() {
     const theme = useTheme();

@@ -33,7 +33,7 @@ interface Filters {
 }
 
 function ChallengeTwoTable<T>({ store, query, route }: TableHooks<T>) {
-  const { isLoading, refetch } = query;
+  const { refetch } = query;
   const [page, setPage] = React.useState(0);
   const [queryParams, setQueryParams] = useState<string>(`${route}/?page=1`);
   const [filters, setFilters] = useState<Filters>();
@@ -113,7 +113,7 @@ function ChallengeTwoTable<T>({ store, query, route }: TableHooks<T>) {
               )}
             </TableHead>
             <TableBody>
-              {store?.data.map((item: Customer) => (
+              {store?.data.map((item: Customer | Product) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>{item.name}</TableCell>

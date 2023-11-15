@@ -9,7 +9,7 @@ import {
 import { ChallengeTwoTable } from "./ChallengeTwoTable";
 import React from 'react';
 import { StateItem, useCustomerStore } from "../../store";
-import { getItemsQuery } from "../../../queries/challengeTwo/getItemQuery";
+import { getItemsQuery } from "../../../queries";
 
 
 function ChallengeTwoTab() {
@@ -35,10 +35,18 @@ function ChallengeTwoTab() {
           </Tabs>
         </Toolbar>
         {activeTab === 0 && (
-          <ChallengeTwoTable store={item} route="customers" query={getItemsQuery("customers/?page=1")} />
+          <ChallengeTwoTable
+            store={item}
+            route="customers"
+            query={getItemsQuery("customers/?page=1")}
+          />
         )}
         {activeTab === 1 && (
-          <ChallengeTwoTable store={item} route="products" query={getItemsQuery("products/?page=1")} />
+          <ChallengeTwoTable
+            store={item}
+            route="products"
+            query={getItemsQuery("products/?page=1")}
+          />
         )}
       </Paper>
     </Box>

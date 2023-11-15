@@ -1,6 +1,6 @@
 import { Grid, Typography, Button } from '@mui/material';
 import { useRandomStore } from '../../shared/store/challengeOne/useRandomStore';
-import { useRandom } from '../../queries/challengeOne';
+import { useRandom } from '../../queries';
 
 function ChallengeOne() {
   const { random } = useRandomStore();

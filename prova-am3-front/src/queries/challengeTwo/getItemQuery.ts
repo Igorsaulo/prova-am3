@@ -1,10 +1,9 @@
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { ProductItem, useCustomerStore } from '../../shared/store';
 import { CustomerItem } from '../../shared/store';
 import { getItems } from './getItems';
 
 export const getItemsQuery = (querys: string) => {
-  const queryClient = useQueryClient();
   const { setItem } = useCustomerStore();
   const { data, isLoading } = useQuery<
     CustomerItem
